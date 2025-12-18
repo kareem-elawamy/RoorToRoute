@@ -9,6 +9,7 @@ namespace Domain.Models
     {
         [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
         public int Rating { get; set; } // من 1 إلى 5
+
         [MaxLength(500)]
         public string? Comment { get; set; }
 

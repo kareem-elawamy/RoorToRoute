@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class Bid:BaseEntity
+    public class Bid : BaseEntity
     {
         [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
@@ -17,6 +17,5 @@ namespace Domain.Models
 
         public Guid BidderId { get; set; } // التاجر
         public ApplicationUser? Bidder { get; set; }
-        
     }
 }

@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class Order: BaseEntity
+    public class Order : BaseEntity
     {
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         public decimal TotalAmount { get; set; }
-        
+
         // من المشتري؟ (ممكن يكون مستخدم عادي أو مصنع)
         public Guid BuyerId { get; set; }
         public ApplicationUser? Buyer { get; set; }

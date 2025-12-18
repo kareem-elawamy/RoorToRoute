@@ -5,7 +5,6 @@ namespace Domain.Enums
         Upcoming,
         Ongoing,
         Completed,
-        Cancelled
-        
+        Cancelled,
     }
 }

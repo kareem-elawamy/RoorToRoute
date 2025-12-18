@@ -23,7 +23,6 @@ namespace Domain.Models
         public PlantInfo? PlantInfo { get; set; }
         public Guid FarmId { get; set; }
         public Farm? Farm { get; set; }
-        public ICollection<CropActivityLog>? Activities { get; set; }
-
+        public ICollection<CropActivityLog>? Activities { get; set; } = new List<CropActivityLog>();
     }
 }

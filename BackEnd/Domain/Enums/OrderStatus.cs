@@ -4,6 +4,6 @@ namespace Domain.Enums
     {
         Pending,
         Shipped,
-        Delivered
+        Delivered,
     }
 }

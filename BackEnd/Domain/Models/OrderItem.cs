@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class OrderItem: BaseEntity
+    public class OrderItem : BaseEntity
     {
         public Guid OrderId { get; set; }
         public Order? Order { get; set; }

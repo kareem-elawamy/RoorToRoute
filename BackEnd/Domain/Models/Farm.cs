@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class Farm: BaseEntity
+    public class Farm : BaseEntity
     {
         public string? Name { get; set; } // اسم المزرعة
         public string? Location { get; set; } // موقع المزرعة
