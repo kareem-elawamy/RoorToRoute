@@ -19,6 +19,7 @@ namespace Domain.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public AuctionStatus Status { get; set; }
+        ////
         public Guid CropId { get; set; }
         public Crop? Crop { get; set; }
         public ICollection<Bid>? Bids { get; set; }

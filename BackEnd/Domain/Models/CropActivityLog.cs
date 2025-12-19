@@ -10,6 +10,7 @@ namespace Domain.Models
 
     {
         [Required, MaxLength(100)]
+        ////
         public string? ActivityType { get; set; } // ري، تسميد، رش مبيدات
         [MaxLength(500)]
         public string? Description { get; set; }
