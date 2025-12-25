@@ -10,7 +10,7 @@ namespace Domain.Models
     {
         public string? FullName { get; set; }
         public string? Address { get; set; }
-        public UserType userType { get; set; } = UserType.User;
+        public UserType UserType { get; set; } = UserType.User;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsDeleted { get; set; } = false; // Soft delete flag
         public ICollection<Farm>? Farms { get; set; }
