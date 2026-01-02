@@ -7,10 +7,14 @@ namespace Domain.Models
 {
     public class Farm : BaseEntity
     {
-        public string? Name { get; set; } // اسم المزرعة
-        public string? Location { get; set; } // موقع المزرعة
-        public Guid OwnerId { get; set; } // معرف المالك (FK to User)
-        public ApplicationUser? Owner { get; set; } // خاصية التنقل للمالك
-        public ICollection<Crop>? Crops { get; set; } // المحاصيل في المزرعة
+        [Required, MaxLength(100)]
+        public string Name { get; set; } = null!;
+        public string? Location { get; set; }
+
+        // المزرعة ملك "مؤسسة" (حتى لو فردية)
+        public Guid OrganizationId { get; set; }
+        public Organization? Organization { get; set; }
+
+        public ICollection<Crop> Crops { get; set; } = new List<Crop>();
     }
 }

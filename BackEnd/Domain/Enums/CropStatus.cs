@@ -2,9 +2,9 @@ namespace Domain.Enums
 {
     public enum CropStatus
     {
-        Planted, // تم الغرس
-        Growing, // في مرحلة النمو
-        Harvested, // تم الحصاد
-        Sold,
+        Seeds, // بذور
+        Growing, // نمو
+        Harvested, // تم الحصاد (نهاية دورة حياة الـ Crop)
+        Damaged, // تالف (لو باظ في الأرض)
     }
 }

@@ -4,7 +4,6 @@ namespace Domain.Enums
     {
         Kilogram,
         Liter,
-        Package
-        
+        Package,
     }
 }

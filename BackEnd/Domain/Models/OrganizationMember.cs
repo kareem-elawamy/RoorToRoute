@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class OrganizationMember:BaseEntity
+    public class OrganizationMember : BaseEntity
     {
         public Guid OrganizationId { get; set; }
         public Organization? Organization { get; set; }
@@ -15,7 +15,5 @@ namespace Domain.Models
         public OrganizationRole? OrganizationRole { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
-        
-
     }
 }

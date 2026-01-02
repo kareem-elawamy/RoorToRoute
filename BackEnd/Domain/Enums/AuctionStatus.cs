@@ -2,9 +2,10 @@ namespace Domain.Enums
 {
     public enum AuctionStatus
     {
-        Upcoming,
-        Ongoing,
-        Completed,
-        Cancelled,
+        Upcoming, // لم يبدأ بعد
+        Ongoing, // شغال حالياً
+        Completed, // انتهى وتم البيع
+        Cancelled, // اتلغى
+        NoBids, // انتهى بدون مزايدات
     }
 }

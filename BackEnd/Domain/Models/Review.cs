@@ -12,10 +12,8 @@ namespace Domain.Models
 
         [MaxLength(500)]
         public string? Comment { get; set; }
-
         public Guid ReviewerId { get; set; }
         public ApplicationUser? Reviewer { get; set; }
-
         public Guid TargetUserId { get; set; }
         public ApplicationUser? TargetUser { get; set; }
     }

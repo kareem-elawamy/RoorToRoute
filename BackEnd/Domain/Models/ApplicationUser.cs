@@ -13,7 +13,8 @@ namespace Domain.Models
         public UserType UserType { get; set; } = UserType.User;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsDeleted { get; set; } = false;
-        public ICollection<Organization>? Organizations { get; set; }
+        public ICollection<OrganizationMember>? Memberships { get; set; }
         public ICollection<Bid>? Bids { get; set; }
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

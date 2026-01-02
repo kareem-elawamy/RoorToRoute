@@ -11,9 +11,8 @@ namespace Domain.Models
         public string? Description { get; set; }
         public bool IsSystemDefault { get; set; }
         public Guid OrganizationId { get; set; }
-        public Organization? Organization { get; set; } 
-        public ICollection<OrganizationRolePermission> Permissions { get; set; } = new List<OrganizationRolePermission>();
-
-        
+        public Organization? Organization { get; set; }
+        public ICollection<OrganizationRolePermission> Permissions { get; set; } =
+            new List<OrganizationRolePermission>();
     }
 }

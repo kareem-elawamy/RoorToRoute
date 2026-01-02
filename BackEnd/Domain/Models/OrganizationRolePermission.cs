@@ -10,6 +10,5 @@ namespace Domain.Models
         public string PermissionsClaim { get; set; } = null!;
         public Guid OrganizationRoleId { get; set; }
         public OrganizationRole? OrganizationRole { get; set; }
-
     }
 }
