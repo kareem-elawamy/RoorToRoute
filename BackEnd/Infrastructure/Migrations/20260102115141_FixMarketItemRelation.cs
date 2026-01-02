@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialIdentitySchema : Migration
+    public partial class FixMarketItemRelation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -57,7 +57,7 @@ namespace Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    userType = table.Column<int>(type: "int", nullable: false),
+                    UserType = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -128,27 +128,35 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Farms",
+                name: "Chats",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReceiverId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Farms", x => x.Id);
+                    table.PrimaryKey("PK_Chats", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Farms_Users_OwnerId",
-                        column: x => x.OwnerId,
+                        name: "FK_Chats_Users_ReceiverId",
+                        column: x => x.ReceiverId,
                         principalSchema: "security",
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Chats_Users_SenderId",
+                        column: x => x.SenderId,
+                        principalSchema: "security",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,7 +181,36 @@ namespace Infrastructure.Migrations
                         principalSchema: "security",
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Organizations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Organizations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Organizations_Users_OwnerId",
+                        column: x => x.OwnerId,
+                        principalSchema: "security",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -303,19 +340,102 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Farm",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Farm", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Farm_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MarketItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StockQuantity = table.Column<int>(type: "int", nullable: false),
+                    IsAvailableForDirectSale = table.Column<bool>(type: "bit", nullable: false),
+                    DirectSalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsAvailableForAuction = table.Column<bool>(type: "bit", nullable: false),
+                    StartBiddingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ItemType = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
+                    OrganizationId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Barcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    WeightUnit = table.Column<int>(type: "int", nullable: true),
+                    SourceCropId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MarketItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MarketItems_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MarketItems_Organizations_OrganizationId1",
+                        column: x => x.OrganizationId1,
+                        principalTable: "Organizations",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrganizationRoles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsSystemDefault = table.Column<bool>(type: "bit", nullable: false),
+                    OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrganizationRoles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrganizationRoles_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Crops",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BatchNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PlantedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HarvestDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BatchNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    IsForAuction = table.Column<bool>(type: "bit", nullable: false),
-                    IsForDirectSale = table.Column<bool>(type: "bit", nullable: false),
-                    DirectSalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    AvailableQuantity = table.Column<int>(type: "int", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PlantedArea = table.Column<double>(type: "float", nullable: false),
+                    PlantingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpectedHarvestDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PlantInfoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FarmId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -326,9 +446,9 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Crops", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Crops_Farms_FarmId",
+                        name: "FK_Crops_Farm_FarmId",
                         column: x => x.FarmId,
-                        principalTable: "Farms",
+                        principalTable: "Farm",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -345,12 +465,12 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    StartPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CurrentHighestBid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CurrentHighestBid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    CropId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MarketItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -359,9 +479,106 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Auctions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Auctions_Crops_CropId",
-                        column: x => x.CropId,
-                        principalTable: "Crops",
+                        name: "FK_Auctions_MarketItems_MarketItemId",
+                        column: x => x.MarketItemId,
+                        principalTable: "MarketItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MarketItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_MarketItems_MarketItemId",
+                        column: x => x.MarketItemId,
+                        principalTable: "MarketItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrganizationMembers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrganizationRoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    JoinedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrganizationMembers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrganizationMembers_OrganizationRoles_OrganizationRoleId",
+                        column: x => x.OrganizationRoleId,
+                        principalTable: "OrganizationRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_OrganizationMembers_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_OrganizationMembers_Users_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalSchema: "security",
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_OrganizationMembers_Users_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "security",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrganizationRolePermissions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PermissionsClaim = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrganizationRoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrganizationRolePermissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrganizationRolePermissions_OrganizationRoles_OrganizationRoleId",
+                        column: x => x.OrganizationRoleId,
+                        principalTable: "OrganizationRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -391,36 +608,6 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItems",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CropId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_Crops_CropId",
-                        column: x => x.CropId,
-                        principalTable: "Crops",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Bids",
                 columns: table => new
                 {
@@ -429,6 +616,7 @@ namespace Infrastructure.Migrations
                     BidTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AuctionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BidderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -443,6 +631,12 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Bids_Users_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalSchema: "security",
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Bids_Users_BidderId",
                         column: x => x.BidderId,
                         principalSchema: "security",
@@ -452,9 +646,14 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Auctions_CropId",
+                name: "IX_Auctions_MarketItemId",
                 table: "Auctions",
-                column: "CropId");
+                column: "MarketItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bids_ApplicationUserId",
+                table: "Bids",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bids_AuctionId",
@@ -465,6 +664,16 @@ namespace Infrastructure.Migrations
                 name: "IX_Bids_BidderId",
                 table: "Bids",
                 column: "BidderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chats_ReceiverId",
+                table: "Chats",
+                column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chats_SenderId",
+                table: "Chats",
+                column: "SenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CropActivityLogs_CropId",
@@ -482,14 +691,24 @@ namespace Infrastructure.Migrations
                 column: "PlantInfoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Farms_OwnerId",
-                table: "Farms",
-                column: "OwnerId");
+                name: "IX_Farm_OrganizationId",
+                table: "Farm",
+                column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_CropId",
+                name: "IX_MarketItems_OrganizationId",
+                table: "MarketItems",
+                column: "OrganizationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MarketItems_OrganizationId1",
+                table: "MarketItems",
+                column: "OrganizationId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_MarketItemId",
                 table: "OrderItems",
-                column: "CropId");
+                column: "MarketItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_OrderId",
@@ -500,6 +719,41 @@ namespace Infrastructure.Migrations
                 name: "IX_Orders_BuyerId",
                 table: "Orders",
                 column: "BuyerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrganizationMembers_ApplicationUserId",
+                table: "OrganizationMembers",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrganizationMembers_OrganizationId",
+                table: "OrganizationMembers",
+                column: "OrganizationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrganizationMembers_OrganizationRoleId",
+                table: "OrganizationMembers",
+                column: "OrganizationRoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrganizationMembers_UserId",
+                table: "OrganizationMembers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrganizationRolePermissions_OrganizationRoleId",
+                table: "OrganizationRolePermissions",
+                column: "OrganizationRoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrganizationRoles_OrganizationId",
+                table: "OrganizationRoles",
+                column: "OrganizationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Organizations_OwnerId",
+                table: "Organizations",
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlantGuideSteps_PlantInfoId",
@@ -570,10 +824,19 @@ namespace Infrastructure.Migrations
                 name: "Bids");
 
             migrationBuilder.DropTable(
+                name: "Chats");
+
+            migrationBuilder.DropTable(
                 name: "CropActivityLogs");
 
             migrationBuilder.DropTable(
                 name: "OrderItems");
+
+            migrationBuilder.DropTable(
+                name: "OrganizationMembers");
+
+            migrationBuilder.DropTable(
+                name: "OrganizationRolePermissions");
 
             migrationBuilder.DropTable(
                 name: "PlantGuideSteps");
@@ -605,20 +868,29 @@ namespace Infrastructure.Migrations
                 name: "Auctions");
 
             migrationBuilder.DropTable(
+                name: "Crops");
+
+            migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "OrganizationRoles");
 
             migrationBuilder.DropTable(
                 name: "Roles",
                 schema: "security");
 
             migrationBuilder.DropTable(
-                name: "Crops");
+                name: "MarketItems");
 
             migrationBuilder.DropTable(
-                name: "Farms");
+                name: "Farm");
 
             migrationBuilder.DropTable(
                 name: "PlantInfos");
+
+            migrationBuilder.DropTable(
+                name: "Organizations");
 
             migrationBuilder.DropTable(
                 name: "Users",

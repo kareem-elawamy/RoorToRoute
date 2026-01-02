@@ -28,7 +28,10 @@ namespace Domain.Models
         [Range(0, double.MaxValue)]
         public decimal StartBiddingPrice { get; set; } // سعر فتح المزاد
 
+
+
         // المالك (مين اللي بيبيع؟)
+        [ForeignKey("OrganizationId")]
         public Guid OrganizationId { get; set; }
         public Organization? Organization { get; set; }
     }

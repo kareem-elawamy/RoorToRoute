@@ -2,6 +2,7 @@ using Domain.Models;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,23 +16,15 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
+
 #endregion
 
-#region Identity Initialization
-builder
-    .Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
-
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 6;
-});
+#region Dependencies Initialization
+builder.Services.AddServiceDependencies().AddServiceRegisteration();
 #endregion
+//---------------------------------------------------------
+// Identity Configuration is moved to ServiceRegisteration.cs
+//---------------------------------------------------------
 
 // Add services to the container.
 

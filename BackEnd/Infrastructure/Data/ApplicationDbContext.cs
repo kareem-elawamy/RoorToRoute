@@ -60,7 +60,6 @@ namespace Infrastructure.Data
             modelBuilder.Entity<MarketItem>()
                 .ToTable("MarketItems")
                 .HasDiscriminator<string>("ItemType")
-                .HasValue<Crop>("Crop")
                 .HasValue<Product>("Product");
 
             // منع حذف المؤسسة إذا كان لديها منتجات
@@ -86,6 +85,11 @@ namespace Infrastructure.Data
                 .HasForeignKey(p => p.OrganizationRoleId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<MarketItem>()
+                    .HasOne(m => m.Organization)          // MarketItem عنده Organization واحدة
+                    .WithMany()                           // (مؤقتاً) Organization عنده items كتير (لو مش ضايف List هناك سيبها فاضية)
+                    .HasForeignKey(m => m.OrganizationId) // ده الأهم: إجبار EF على استخدام OrganizationId اللي أنت عملته
+                    .OnDelete(DeleteBehavior.Restrict);
             // --- 4. Decimal Precision ---
             var decimalProps = new[]
             {
@@ -94,7 +98,6 @@ namespace Infrastructure.Data
                 (typeof(Bid), "Amount"),
                 (typeof(Order), "TotalAmount"),
                 (typeof(OrderItem), "UnitPrice"),
-                (typeof(MarketItem), "Price")
             };
 
             foreach (var prop in decimalProps)
@@ -141,14 +144,14 @@ namespace Infrastructure.Data
                 .HasForeignKey(c => c.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<OrganizationMember>()
-                .HasOne(om=>om.Organization)
-                .WithMany(om=>om.Members)
-                .HasForeignKey(om=>om.OrganizationId)
+                .HasOne(om => om.Organization)
+                .WithMany(om => om.Members)
+                .HasForeignKey(om => om.OrganizationId)
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<OrganizationMember>()
-                .HasOne(om=>om.User)
+                .HasOne(om => om.User)
                 .WithMany()
-                .HasForeignKey(om=>om.UserId)
+                .HasForeignKey(om => om.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
