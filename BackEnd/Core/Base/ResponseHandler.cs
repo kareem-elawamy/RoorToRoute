@@ -8,6 +8,7 @@ namespace Core.Base
 {
     public class ResponseHandler
     {
+
         public Response<T> Deleted<T>(string message = "Deleted Successfully")
         {
             return new Response<T>()
@@ -43,6 +44,15 @@ namespace Core.Base
             return new Response<T>()
             {
                 StatusCode = HttpStatusCode.BadRequest,
+                Succeeded = false,
+                Message = message
+            };
+        }
+        public Response<T> UnprocessableEntity<T>(string message = "Validation Failed")
+        {
+            return new Response<T>()
+            {
+                StatusCode = HttpStatusCode.UnprocessableEntity,
                 Succeeded = false,
                 Message = message
             };
