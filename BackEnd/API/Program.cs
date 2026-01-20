@@ -1,3 +1,4 @@
+using Core;
 using Domain.Models;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +21,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 #endregion
 
 #region Dependencies Initialization
-builder.Services.AddServiceDependencies().AddServiceRegisteration();
+builder.Services.AddServiceDependencies().AddServiceRegisteration().AddCoreDependencies();
 #endregion
 //---------------------------------------------------------
 // Identity Configuration is moved to ServiceRegisteration.cs

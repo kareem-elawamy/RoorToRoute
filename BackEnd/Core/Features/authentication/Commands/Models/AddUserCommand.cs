@@ -19,5 +19,6 @@ namespace Core.Features.authentication.Commands.Models
         public string? ConfirmPassword { get; set; }
         public string? PhoneNumber { get; set; }
         
+        
     }
 }
