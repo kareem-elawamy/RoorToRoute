@@ -39,6 +39,7 @@ namespace Service
             }).AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();
                 services.AddScoped<IPlantInfoService, PlantInfoService>();
+                services.AddScoped<IPlantGuideStepService, PlantGuideStepService>();
             return services;
         }
     }

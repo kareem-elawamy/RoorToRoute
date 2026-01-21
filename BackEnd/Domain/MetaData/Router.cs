@@ -7,6 +7,7 @@ namespace Domain.MetaData
 {
     public static class Router
     {
+        public const string plantNameRoute = "/{plantName}";
         public const string singelroute = "/{id}";
         public const string root = "api";
         public const string varsion = "v1";
@@ -21,6 +22,14 @@ namespace Domain.MetaData
         {
             public const string Prefix = rule + "plantinfo/";
             public const string GetAllPlantInfos = Prefix + "getallplantinfos";
+        }
+        public static class PlantGuideStep
+        {
+            public const string Prefix = rule + "plantguidestep/";
+            public const string GetAllPlantGuideSteps = Prefix + "getallplantguidesteps";
+            public const string GetPlantGuideStepById = Prefix + "getplantguidestepbyid" + singelroute;
+            public const string GetPlantGuideStepsByPlantId = Prefix + "getplantguidestepsbyplantid" + singelroute;
+            public const string GetPlantGuideStepsByPlantName = Prefix + "getplantguidestepsbyplantname" + plantNameRoute;
         }
 
     }

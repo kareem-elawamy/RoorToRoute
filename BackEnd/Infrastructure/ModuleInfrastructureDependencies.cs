@@ -12,6 +12,7 @@ public static class ModuleInfrastructureDependencies
         // Register infrastructure services here if needed
         services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
         services.AddScoped<IPlantInfoRepo, PlantInfoRepo>();
+        services.AddScoped<IPlantGuideStepRepo, PlantGuideStepRepo>();
         return services;
     }
 }
