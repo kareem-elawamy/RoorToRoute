@@ -52,7 +52,7 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-    
+
 });
 
 var app = builder.Build();
@@ -63,6 +63,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseStaticFiles(); 
 
 // ---------------------------------------------------------
 // تم تعليق التوجيه لـ HTTPS عشان نمنع المشكلة

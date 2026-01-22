@@ -14,6 +14,7 @@ namespace Core.Features.PlantInfo.Queries.Result
         public string? IdealSoil { get; set; } // التربة المثالية
         public string MedicalBenefits { get; set; } = string.Empty; // للأعشاب
         public string? PlantingSeason { get; set; } // موسم الزراعة
+        public string? ImageUrl { get; set; } // رابط صورة للنبات
 
     }
 }

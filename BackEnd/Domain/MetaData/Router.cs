@@ -22,6 +22,7 @@ namespace Domain.MetaData
         {
             public const string Prefix = rule + "plantinfo/";
             public const string GetAllPlantInfos = Prefix + "getallplantinfos";
+            public const string CreatePlantInfo = Prefix + "createplantinfo";
         }
         public static class PlantGuideStep
         {
