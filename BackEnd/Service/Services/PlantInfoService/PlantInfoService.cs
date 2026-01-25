@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Enums;
 using Domain.Models;
 using Infrastructure.Repositories.PlantInfoRepository;
 using Microsoft.AspNetCore.Http;
@@ -76,7 +77,7 @@ namespace Service.Services.PlantInfoService
             {
                 var newImageUrl = await _fileService.UploadImageAsync("plant-images", imageFile);
 
-                
+
                 // if (!string.IsNullOrEmpty(existingPlant.ImageUrl)) 
                 //    _fileService.DeleteImage(existingPlant.ImageUrl); 
                 existingPlant.ImageUrl = newImageUrl;
@@ -86,6 +87,32 @@ namespace Service.Services.PlantInfoService
 
             await _plantInfoRepo.UpdateAsync(existingPlant);
             return "Success";
+        }
+
+        public IQueryable<PlantInfo> FilterPlantinfoPaginatedQuerable(PlantInfoOrderingEnum orderingEnum, string search)
+        {
+            var querable = _plantInfoRepo.GetTableNoTracking().AsQueryable();
+            if (search != null)
+            {
+                querable = querable.Where(x => x.Name!.Contains(search) || x.PlantingSeason!.Contains(search) || x.ScientificName!.Contains(search));
+            }
+            switch (orderingEnum)
+            {
+                case PlantInfoOrderingEnum.Id:
+                    querable = querable.OrderBy(x => x.Id);
+                    break;
+                case PlantInfoOrderingEnum.Name:
+                    querable = querable.OrderBy(x => x.Name);
+                    break;
+                case PlantInfoOrderingEnum.ScientificName:
+                    querable = querable.OrderBy(x => x.ScientificName);
+                    break;
+                case PlantInfoOrderingEnum.PlantingSeason:
+                    querable = querable.OrderBy(x => x.PlantingSeason);
+                    break;
+            }
+
+            return querable;
         }
 
         public async Task<List<PlantInfo>> GetAllPlantInfosAsync()

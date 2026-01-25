@@ -21,6 +21,7 @@ namespace Domain.MetaData
             public const string CreatePlantInfo = Prefix + "createplantinfo";
             public const string EditPlantInfo = Prefix + "editplantinfo";
             public const string DeletePlantInfo = Prefix + "deleteplantinfo";
+            public const string Paginated = Prefix + "paginated";
 
         }
         public static class PlantGuideStep
@@ -30,6 +31,12 @@ namespace Domain.MetaData
             public const string GetPlantGuideStepById = Prefix + "getplantguidestepbyid" + singelroute;
             public const string GetPlantGuideStepsByPlantId = Prefix + "getplantguidestepsbyplantid" + singelroute;
             public const string GetPlantGuideStepsByPlantName = Prefix + "getplantguidestepsbyplantname" + plantNameRoute;
+        }
+        public static class OrganizationRole
+        {
+            public const string Prefix = rule + "organizationrole/";
+            public const string CreateOrganizationRole = Prefix + "createorganizationrole";
+
         }
 
     }

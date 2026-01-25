@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Enums;
 using Domain.Models;
 using Microsoft.AspNetCore.Http;
 
@@ -15,6 +16,7 @@ namespace Service.Services.PlantInfoService
         public Task<bool> IsPlantInfoExistsAsync(string name);
         public Task<PlantInfo?> GetPlantInfoByIdAsync(Guid id);
         public Task<string> DeletePlantInfoAsync(PlantInfo plantInfo);
+        public IQueryable<PlantInfo> FilterPlantinfoPaginatedQuerable(PlantInfoOrderingEnum orderingEnum, string search);
 
 
     }

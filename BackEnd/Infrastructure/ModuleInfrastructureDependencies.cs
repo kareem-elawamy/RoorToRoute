@@ -1,5 +1,7 @@
 ﻿using Infrastructure.Base;
+using Infrastructure.Repositories.OrganizationMemberRepository;
 using Infrastructure.Repositories.OrganizationRepository;
+using Infrastructure.Repositories.OrganizationRoleRepository;
 using Infrastructure.Repositories.PlantGuideStepRepository;
 using Infrastructure.Repositories.PlantInfoRepository;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,8 @@ public static class ModuleInfrastructureDependencies
         services.AddScoped<IPlantInfoRepository, PlantInfoRepository>();
         services.AddScoped<IPlantGuideStepRepository, PlantGuideStepRepository>();
         services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+        services.AddScoped<IOrganizationMemberRepository, OrganizationMemberRepository>();
+        services.AddScoped<IOrganizationRoleRepository, OrganizationRoleRepository>();
         return services;
     }
 }

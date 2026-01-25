@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Service.Services;
 using Service.Services.AuthenticationService;
+using Service.Services.AuthorizationService;
 using Service.Services.FileService;
+using Service.Services.OrganizationMemberService;
+using Service.Services.OrganizationRoleService;
 using Service.Services.PlantGuideStepService;
 using Service.Services.PlantInfoService;
 
@@ -14,8 +17,13 @@ public static class ModuleServiceDependencies
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IPlantGuideStepService, PlantGuideStepService>();
         services.AddScoped<IPlantInfoService, PlantInfoService>();
-        services.AddScoped<IOrganizationService,OrganizationService>();
+        services.AddScoped<IOrganizationService, OrganizationService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<IOrganizationRoleService, OrganizationRoleService>();
+        services.AddScoped<IOrganizationMemberService, OrganizationMemberService>();
+
+
         return services;
     }
 

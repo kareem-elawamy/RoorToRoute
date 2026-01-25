@@ -17,13 +17,14 @@ namespace Domain.Models
         public DateTime? ExpectedHarvestDate { get; set; }
 
         // البيانات المرجعية
-        public Guid PlantInfoId { get; set; }
+        public Guid? PlantInfoId { get; set; }
         public PlantInfo? PlantInfo { get; set; }
 
         // المكان
         public Guid FarmId { get; set; }
         public Farm? Farm { get; set; }
-
+        public double? ActualYieldQuantity { get; set; } // الكمية الفعلية عند الحصاد
+        public YieldUnit YieldUnit { get; set; }
         public ICollection<CropActivityLog> Activities { get; set; } = new List<CropActivityLog>();
     }
 }
