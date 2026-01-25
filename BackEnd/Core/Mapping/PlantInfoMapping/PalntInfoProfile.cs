@@ -13,6 +13,7 @@ namespace Core.Mapping.PlantInfoMapping
             ConfigureGetListPalntInfoMapping();
             CreatePlantInfoMapping();
             EditPlantInfoMapping();
+            GetPantInfoPaginationMapping();
         }
     }
 }
